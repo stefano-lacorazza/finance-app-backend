@@ -28,6 +28,11 @@ class Category(models.Model):
 
 class Expense(models.Model):
     """Model for tracking expenses"""
+    PAYMENT_METHOD_CHOICES = [
+        ('DEBIT', 'Debit'),
+        ('CREDIT', 'Credit'),
+    ]
+    
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='expenses')
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, related_name='expenses')
     amount = models.DecimalField(
@@ -36,6 +41,7 @@ class Expense(models.Model):
         validators=[MinValueValidator(Decimal('0.01'))]
     )
     description = models.CharField(max_length=255)
+    payment_method = models.CharField(max_length=10, choices=PAYMENT_METHOD_CHOICES)
     notes = models.TextField(blank=True, null=True)
     date = models.DateField()
     created_at = models.DateTimeField(auto_now_add=True)
